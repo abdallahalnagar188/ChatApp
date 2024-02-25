@@ -37,7 +37,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -52,23 +51,36 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.chatapp.R
+import com.example.chatapp.home.HomeActivity
 import com.example.chatapp.register.RegisterActivity
 import com.example.chatapp.register.ui.theme.ChatAppTheme
 
-class LoginActivity : ComponentActivity() {
+class LoginActivity : ComponentActivity(), Navigator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ChatAppTheme {
-                LoginContent()
+                LoginContent(navigator = this)
             }
         }
+    }
+
+    override fun openHomeActivity() {
+        val intent = Intent(this@LoginActivity,HomeActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    override fun openRegisterActivity() {
+        val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
+        startActivity(intent)
     }
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun LoginContent(viewModel: LoginViewModel = viewModel()) {
+fun LoginContent(viewModel: LoginViewModel = viewModel(),navigator: Navigator) {
+    viewModel.navigator = navigator
     Scaffold(modifier = Modifier.fillMaxSize(),
         topBar = {
             Text(
@@ -107,10 +119,8 @@ fun LoginContent(viewModel: LoginViewModel = viewModel()) {
             ChatButton(buttonText = "Login") {
                 viewModel.sendAuthDataToFirebase()
             }
-            val context = LocalContext.current
             TextButton(onClick = {
-                val intent = Intent(context, RegisterActivity::class.java)
-                context.startActivity(intent)
+                viewModel.navigateToRegisterActivity()
             }, modifier = Modifier.padding(horizontal = 16.dp))
             {
                 Text(
@@ -159,6 +169,7 @@ fun ChatButton(buttonText: String, onButtonClick: () -> Unit) {
 
 @Composable
 fun LoadingDialog(viewModel: LoginViewModel = viewModel()) {
+
     if (viewModel.showLoading.value)
         Dialog(onDismissRequest = { }) {
             Box(

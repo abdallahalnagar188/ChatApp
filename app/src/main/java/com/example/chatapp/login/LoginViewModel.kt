@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.chatapp.database.addUserToFirestoreDB
 import com.example.chatapp.database.getUserFromFirestoreDB
 import com.example.chatapp.model.AppUser
 import com.google.firebase.Firebase
@@ -18,6 +17,7 @@ class LoginViewModel : ViewModel() {
     val showLoading = mutableStateOf(false)
     val message = mutableStateOf("")
     private val auth = Firebase.auth
+    var navigator : Navigator? = null
 
     fun validate(): Boolean {
         if (emailState.value.isEmpty() || emailState.value.isBlank()) {
@@ -43,12 +43,17 @@ class LoginViewModel : ViewModel() {
 
     }
 
+    fun navigateToRegisterActivity(){
+        navigator?.openRegisterActivity()
+
+    }
     fun registerToAuth() {
         auth.signInWithEmailAndPassword(emailState.value, passwordState.value)
             .addOnCompleteListener {
                 showLoading.value = false
                 if (it.isSuccessful) {
                     //navigate to home activity
+                    navigator?.openHomeActivity()
                     //Add User to Firestore
                     getUserFromFirestore(it.result.user?.uid)
 
@@ -64,6 +69,8 @@ class LoginViewModel : ViewModel() {
         showLoading.value = true
         getUserFromFirestoreDB(uid!!,
             onSuccessListener = {
+                val appUser = it.toObject(AppUser::class.java)
+
                 message.value = "Successful Login"
                 showLoading.value = false
             }, onFailureListener = {
