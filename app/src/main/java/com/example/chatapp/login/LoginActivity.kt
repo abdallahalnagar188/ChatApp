@@ -1,6 +1,7 @@
-package com.example.chatapp.register
+package com.example.chatapp.login
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -36,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -43,20 +45,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.chatapp.R
+import com.example.chatapp.register.RegisterActivity
 import com.example.chatapp.register.ui.theme.ChatAppTheme
 
-class RegisterActivity : ComponentActivity() {
+class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ChatAppTheme {
-                RegisterContent()
+                LoginContent()
             }
         }
     }
@@ -64,8 +68,21 @@ class RegisterActivity : ComponentActivity() {
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun RegisterContent(viewModel: RegisterViewModel = viewModel()) {
-    Scaffold(modifier = Modifier.fillMaxSize()) {
+fun LoginContent(viewModel: LoginViewModel = viewModel()) {
+    Scaffold(modifier = Modifier.fillMaxSize(),
+        topBar = {
+            Text(
+                text = "Login",
+                modifier = Modifier
+                    .padding(vertical = 28.dp)
+                    .fillMaxWidth(),
+                style = TextStyle(
+                    color = colorResource(id = R.color.white),
+                    textAlign = TextAlign.Center,
+                    fontSize = 22.sp
+                )
+            )
+        }) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -75,11 +92,6 @@ fun RegisterContent(viewModel: RegisterViewModel = viewModel()) {
                 )
         ) {
             Spacer(modifier = Modifier.fillMaxHeight(0.35F))
-            ChatAuthTextField(
-                state = viewModel.firstNameState,
-                label = "First Name",
-                errorState = viewModel.firstNameError
-            )
             ChatAuthTextField(
                 state = viewModel.emailState,
                 label = "Email",
@@ -92,8 +104,19 @@ fun RegisterContent(viewModel: RegisterViewModel = viewModel()) {
                 isPassword = true
             )
             Spacer(modifier = Modifier.height(40.dp))
-            ChatButton(buttonText = "Create Account") {
+            ChatButton(buttonText = "Login") {
                 viewModel.sendAuthDataToFirebase()
+            }
+            val context = LocalContext.current
+            TextButton(onClick = {
+                val intent = Intent(context, RegisterActivity::class.java)
+                context.startActivity(intent)
+            }, modifier = Modifier.padding(horizontal = 16.dp))
+            {
+                Text(
+                    text = "Create a New Account",
+                    style = TextStyle(color = Color.Gray), fontSize = 16.sp
+                )
             }
             LoadingDialog()
             ChatAlertDialog()
@@ -135,7 +158,7 @@ fun ChatButton(buttonText: String, onButtonClick: () -> Unit) {
 }
 
 @Composable
-fun LoadingDialog(viewModel: RegisterViewModel = viewModel()) {
+fun LoadingDialog(viewModel: LoginViewModel = viewModel()) {
     if (viewModel.showLoading.value)
         Dialog(onDismissRequest = { }) {
             Box(
@@ -208,7 +231,7 @@ fun GreetingPreview2() {
 }
 
 @Composable
-fun ChatAlertDialog(viewModel: RegisterViewModel = viewModel()) {
+fun ChatAlertDialog(viewModel: LoginViewModel = viewModel()) {
     if (viewModel.message.value.isNotEmpty())
         AlertDialog(onDismissRequest = {
             viewModel.message.value = ""

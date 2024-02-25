@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.chatapp.R
+import com.example.chatapp.login.LoginActivity
 import com.example.chatapp.register.RegisterActivity
 import com.example.chatapp.ui.theme.ChatAppTheme
 
@@ -30,7 +31,7 @@ class SplashActivity : ComponentActivity() {
                 Handler(Looper.getMainLooper()).postDelayed({
                     val intent = Intent(
                         this@SplashActivity,
-                        RegisterActivity::class.java
+                        LoginActivity::class.java
                     )
                     startActivity(intent)
                     finish()

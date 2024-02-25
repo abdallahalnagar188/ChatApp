@@ -1,17 +1,16 @@
-package com.example.chatapp.register
+package com.example.chatapp.login
 
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.chatapp.database.addUserToFirestoreDB
+import com.example.chatapp.database.getUserFromFirestoreDB
 import com.example.chatapp.model.AppUser
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
-class RegisterViewModel : ViewModel() {
-    val firstNameState = mutableStateOf("")
-    val firstNameError = mutableStateOf("")
+class LoginViewModel : ViewModel() {
     val emailState = mutableStateOf("")
     val emailError = mutableStateOf("")
     val passwordState = mutableStateOf("")
@@ -21,12 +20,6 @@ class RegisterViewModel : ViewModel() {
     private val auth = Firebase.auth
 
     fun validate(): Boolean {
-        if (firstNameState.value.isEmpty() || firstNameState.value.isBlank()) {
-            firstNameError.value = "First Name Required"
-            return false
-        } else {
-            firstNameError.value = ""
-        }
         if (emailState.value.isEmpty() || emailState.value.isBlank()) {
             emailError.value = "Email Required"
             return false
@@ -51,13 +44,13 @@ class RegisterViewModel : ViewModel() {
     }
 
     fun registerToAuth() {
-        auth.createUserWithEmailAndPassword(emailState.value, passwordState.value)
+        auth.signInWithEmailAndPassword(emailState.value, passwordState.value)
             .addOnCompleteListener {
                 showLoading.value = false
                 if (it.isSuccessful) {
-                    //navigate to home
+                    //navigate to home activity
                     //Add User to Firestore
-                    addUserToFirestore(it.result.user?.uid)
+                    getUserFromFirestore(it.result.user?.uid)
 
                 } else {
                     message.value = it.exception?.localizedMessage ?: ""
@@ -67,18 +60,13 @@ class RegisterViewModel : ViewModel() {
             }
     }
 
-    fun addUserToFirestore(uid: String?) {
-        val appUser = AppUser(
-            id = uid,
-            firstName = firstNameState.value,
-            emil = emailState.value
-        )
+    fun getUserFromFirestore(uid: String?) {
         showLoading.value = true
-        addUserToFirestoreDB(appUser,
-            addOnSuccessListener = {
-                message.value = "successful"
+        getUserFromFirestoreDB(uid!!,
+            onSuccessListener = {
+                message.value = "Successful Login"
                 showLoading.value = false
-            }, addOnFailureListener = {
+            }, onFailureListener = {
                 showLoading.value = false
                 message.value = it.localizedMessage ?: ""
             }
