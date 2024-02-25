@@ -91,7 +91,7 @@ fun LoginContent(viewModel: LoginViewModel = viewModel(),navigator: Navigator) {
                 style = TextStyle(
                     color = colorResource(id = R.color.white),
                     textAlign = TextAlign.Center,
-                    fontSize = 22.sp
+                    fontSize = 26.sp
                 )
             )
         }) {
