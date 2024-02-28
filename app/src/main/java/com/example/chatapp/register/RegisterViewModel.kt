@@ -75,10 +75,10 @@ class RegisterViewModel : ViewModel() {
         )
         showLoading.value = true
         addUserToFirestoreDB(appUser,
-            addOnSuccessListener = {
+            onSuccessListener = {
                 message.value = "successful"
                 showLoading.value = false
-            }, addOnFailureListener = {
+            }, onFailureListener = {
                 showLoading.value = false
                 message.value = it.localizedMessage ?: ""
             }

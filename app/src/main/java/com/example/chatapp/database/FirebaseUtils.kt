@@ -1,24 +1,30 @@
 package com.example.chatapp.database
 
-import androidx.compose.runtime.snapshots.Snapshot
 import com.example.chatapp.model.AppUser
+import com.example.chatapp.model.Room
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.firestore
 
+fun getCollectionRef(collectionName: String): CollectionReference {
+    val db = Firebase.firestore
+    return db.collection(collectionName)
+}
+
 fun addUserToFirestoreDB(
     appUser: AppUser,
-    addOnSuccessListener: OnSuccessListener<Void>,
-    addOnFailureListener: OnFailureListener
+    onSuccessListener: OnSuccessListener<Void>,
+    onFailureListener: OnFailureListener
 ) {
-    val db = Firebase.firestore
-    val collection = db.collection(AppUser.COLLECTION_NAME)
-    collection.document(appUser.id!!)
+
+    getCollectionRef(AppUser.COLLECTION_NAME)
+        .document(appUser.id!!)
         .set(appUser)
-        .addOnSuccessListener(addOnSuccessListener)
-        .addOnFailureListener(addOnFailureListener)
+        .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
 }
 
 fun getUserFromFirestoreDB(
@@ -26,11 +32,23 @@ fun getUserFromFirestoreDB(
     onSuccessListener: OnSuccessListener<DocumentSnapshot>,
     onFailureListener: OnFailureListener
 ) {
-    val db = Firebase.firestore
-    val collection = db.collection(AppUser.COLLECTION_NAME)
-    collection.document(uid)
+    getCollectionRef(AppUser.COLLECTION_NAME).document(uid)
         .get()
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
+}
+
+fun addRoomToFirestoreDB(
+    room: Room,
+    onSuccessListener: OnSuccessListener<Void>,
+    onFailureListener: OnFailureListener
+) {
+    val documentReference = getCollectionRef(Room.COLLECTION_NAME).document()
+    room.roomId = documentReference.id
+    documentReference
+        .set(room)
+        .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
+
 
 }
