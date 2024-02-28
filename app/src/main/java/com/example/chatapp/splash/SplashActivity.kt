@@ -17,36 +17,48 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.chatapp.R
+import com.example.chatapp.home.HomeActivity
 import com.example.chatapp.login.LoginActivity
-import com.example.chatapp.register.RegisterActivity
 import com.example.chatapp.ui.theme.ChatAppTheme
 
 @SuppressLint("CustomSplashScreen")
-class SplashActivity : ComponentActivity() {
+class SplashActivity : ComponentActivity(), Navigator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ChatAppTheme {
                 Handler(Looper.getMainLooper()).postDelayed({
-                    val intent = Intent(
-                        this@SplashActivity,
-                        LoginActivity::class.java
-                    )
-                    startActivity(intent)
-                    finish()
                 }, 2000)
-                SplashScreen()
+                SplashScreen(navigator = this)
             }
         }
+    }
+
+    override fun navigateToLogin() {
+        val intent = Intent(this@SplashActivity, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    override fun navigateToHome() {
+        val intent = Intent(this@SplashActivity, HomeActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }
 
 @Composable
-fun SplashScreen() {
+fun SplashScreen(
+    viewModel: SplashViewModel = viewModel()
+    ,navigator: Navigator) {
+    viewModel .navigator = navigator
+    viewModel.navigate()
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (logo, signature) = createRefs()
-        Image(painter = painterResource(id = R.drawable.ic_logo),
+        Image(
+            painter = painterResource(id = R.drawable.ic_logo),
             contentDescription = "logo",
             modifier = Modifier
                 .fillMaxWidth(0.4F)
@@ -74,5 +86,5 @@ fun SplashScreen() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun GreetingPreview() {
-    SplashScreen()
+//    SplashScreen()
 }
