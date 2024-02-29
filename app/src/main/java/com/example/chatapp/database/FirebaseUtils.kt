@@ -7,6 +7,7 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.firestore
 
 fun getCollectionRef(collectionName: String): CollectionReference {
@@ -49,6 +50,14 @@ fun addRoomToFirestoreDB(
         .set(room)
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
+}
 
+fun getRoomsFromFirestoreDB(
+    onSuccessListener: OnSuccessListener<QuerySnapshot>,
+    onFailureListener: OnFailureListener
+) {
+    val roomCollection = getCollectionRef(Room.COLLECTION_NAME)
+    roomCollection.get().addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
 
 }

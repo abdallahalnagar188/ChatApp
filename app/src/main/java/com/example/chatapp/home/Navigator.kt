@@ -1,5 +1,9 @@
 package com.example.chatapp.home
 
+import com.example.chatapp.model.Room
+
 interface Navigator {
-    fun goToAddRoomScreen()
+    fun navigateToAddRoomScreen()
+    fun navigateToChatScreen(room: Room)
+
 }

@@ -3,4 +3,5 @@
     <string name="title_activity_register">RegisterActivity</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="title_activity_add_room">AddRoomActivity</string>
+    <string name="title_activity_chat">ChatActivity</string>
 </resources>
