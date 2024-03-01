@@ -1,46 +1,113 @@
 package com.example.chatapp.chat
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.chatapp.R
 import com.example.chatapp.chat.ui.theme.ChatAppTheme
+import com.example.chatapp.model.Constance
+import com.example.chatapp.model.Room
 
-class ChatActivity : ComponentActivity() {
+class ChatActivity : ComponentActivity(), Navigator {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ChatAppTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
+                ChatScreenContent(navigator = this)
             }
         }
     }
+
+    override fun navigateUp() {
+        finish()
+    }
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun ChatScreenContent(viewModel: ChatViewModel = viewModel(),navigator: Navigator) {
+    viewModel.navigator = navigator
+    Scaffold(contentColor = Color.White,
+        topBar = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(6.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                IconButton(onClick = {
+                    navigator.navigateUp()
+                }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.icon_back),
+                        contentDescription = "Icon back"
+                    )
+                }
+                Text(
+                    text = "Movie Room",
+                    style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp),
+                    textAlign = TextAlign.Center
+                )
+                IconButton(onClick = {
+
+                }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.icon_option),
+                        contentDescription = "Icon option"
+                    )
+                }
+            }
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .paint(
+                    painterResource(id = R.drawable.bg_app),
+                    contentScale = ContentScale.FillBounds
+                )
+        ) {
+
+
+        }
+    }
+
 }
 
-@Preview(showBackground = true)
+
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun GreetingPreview5() {
     ChatAppTheme {
-        Greeting("Android")
+
     }
 }

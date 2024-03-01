@@ -1,7 +1,7 @@
 package com.example.chatapp.splash
 
 import androidx.lifecycle.ViewModel
-import com.example.chatapp.DataUtils
+import com.example.chatapp.model.DataUtils
 import com.example.chatapp.database.getUserFromFirestoreDB
 import com.example.chatapp.model.AppUser
 import com.google.firebase.Firebase

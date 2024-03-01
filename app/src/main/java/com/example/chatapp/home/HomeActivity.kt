@@ -42,6 +42,7 @@ import com.example.chatapp.addRoom.AddRoomActivity
 import com.example.chatapp.chat.ChatActivity
 import com.example.chatapp.home.ui.theme.ChatAppTheme
 import com.example.chatapp.model.Category
+import com.example.chatapp.model.Constance
 import com.example.chatapp.model.Room
 
 class HomeActivity : ComponentActivity(), Navigator {
@@ -62,6 +63,7 @@ class HomeActivity : ComponentActivity(), Navigator {
 
     override fun navigateToChatScreen(room: Room) {
         val intent = Intent(this@HomeActivity, ChatActivity::class.java)
+        intent.putExtra(Constance.EXTRA_ROOM,room)
         startActivity(intent)
     }
 }
@@ -87,7 +89,7 @@ fun HomeContent(viewModel: HomeViewModel = viewModel(), navigator: Navigator) {
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    viewModel.navigator?.navigateToAddRoomScreen()
+                    navigator.navigateToAddRoomScreen()
                 },
                 containerColor = colorResource(id = R.color.blue),
                 contentColor = colorResource(
@@ -109,7 +111,7 @@ fun HomeContent(viewModel: HomeViewModel = viewModel(), navigator: Navigator) {
                     contentScale = ContentScale.FillBounds
                 )
         ) {
-            Spacer(modifier = Modifier.height(190.dp))
+            Spacer(modifier = Modifier.height(120.dp))
             ChatRoomLazyGrid(navigator = navigator)
 
         }
@@ -137,7 +139,8 @@ fun ChatRoomLazyGrid(
 fun ChatRoomCard(room: Room, viewModel: HomeViewModel = viewModel(), navigator: Navigator) {
     Card(
         onClick = {
-            viewModel.navigator?.navigateToChatScreen(room)
+            viewModel.navigator = navigator
+            navigator.navigateToChatScreen(room)
         },
         modifier = Modifier
             .height(200.dp)
@@ -178,7 +181,6 @@ fun ChatRoomCard(room: Room, viewModel: HomeViewModel = viewModel(), navigator: 
                     .padding(vertical = 8.dp),
                 style = TextStyle(fontSize = 12.sp, color = Color.Gray)
             )
-
 
         }
 

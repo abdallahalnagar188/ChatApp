@@ -1,4 +1,4 @@
-package com.example.chatapp
+package com.example.chatapp.model
 
 import com.example.chatapp.model.AppUser
 import com.google.firebase.auth.FirebaseUser
