@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -30,18 +32,17 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.chatapp.R
 import com.example.chatapp.chat.ui.theme.ChatAppTheme
-import com.example.chatapp.model.Constance
 import com.example.chatapp.model.Room
 
 class ChatActivity : ComponentActivity(), Navigator {
-
+lateinit var room: Room
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ChatAppTheme {
                 // A surface container using the 'background' color from the theme
-                ChatScreenContent(navigator = this)
+                ChatScreenContent(navigator = this, room = room)
             }
         }
     }
@@ -53,8 +54,9 @@ class ChatActivity : ComponentActivity(), Navigator {
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ChatScreenContent(viewModel: ChatViewModel = viewModel(),navigator: Navigator) {
+fun ChatScreenContent(viewModel: ChatViewModel = viewModel(),navigator: Navigator,room: Room) {
     viewModel.navigator = navigator
+    viewModel.room = room
     Scaffold(contentColor = Color.White,
         topBar = {
             Row(
@@ -96,10 +98,21 @@ fun ChatScreenContent(viewModel: ChatViewModel = viewModel(),navigator: Navigato
                     contentScale = ContentScale.FillBounds
                 )
         ) {
-
+            ChatLazyColumn()
 
         }
     }
+
+}
+
+@Composable
+fun ChatLazyColumn(viewModel: ChatViewModel = viewModel()) {
+LazyColumn(){
+    items(viewModel.messageListState.value.size){
+        val item = viewModel.messageListState.value.get(it)
+        //if (item)
+    }
+}
 
 }
 
