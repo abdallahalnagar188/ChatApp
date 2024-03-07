@@ -10,10 +10,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -42,7 +47,7 @@ lateinit var room: Room
         setContent {
             ChatAppTheme {
                 // A surface container using the 'background' color from the theme
-                ChatScreenContent(navigator = this, room = room)
+                ChatScreenContent(navigator = this)
             }
         }
     }
@@ -54,9 +59,8 @@ lateinit var room: Room
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ChatScreenContent(viewModel: ChatViewModel = viewModel(),navigator: Navigator,room: Room) {
+fun ChatScreenContent(viewModel: ChatViewModel = viewModel(), navigator: Navigator) {
     viewModel.navigator = navigator
-    viewModel.room = room
     Scaffold(contentColor = Color.White,
         topBar = {
             Row(
@@ -88,6 +92,11 @@ fun ChatScreenContent(viewModel: ChatViewModel = viewModel(),navigator: Navigato
                     )
                 }
             }
+        }, bottomBar = {
+            Row() {
+                ChatSendMessageBar()
+            }
+
         }
     ) {
         Column(
@@ -102,17 +111,53 @@ fun ChatScreenContent(viewModel: ChatViewModel = viewModel(),navigator: Navigato
 
         }
     }
+}
+
+@Composable
+fun ChatSendMessageBar(viewModel: ChatViewModel = viewModel()) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        OutlinedTextField(
+            value = viewModel.messageFieldState.value,
+            onValueChange = {
+                viewModel.messageFieldState.value = it
+            },
+            shape = RoundedCornerShape(
+                bottomStart = 0.dp,
+                topStart = 0.dp,
+                topEnd = 15.dp,
+                bottomEnd = 0.dp
+            ), modifier = Modifier.padding(12.dp)
+        )
+        Button(
+            onClick = {
+                viewModel.addMessageToFirestore()
+            },
+            modifier = Modifier
+                .padding(12.dp)
+                .width(100.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue)),
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            Text(text = "Send")
+            Icon(
+                painter = painterResource(id = R.drawable.icon_send),
+                contentDescription = "icon send",
+            )
+
+        }
+
+    }
 
 }
 
 @Composable
 fun ChatLazyColumn(viewModel: ChatViewModel = viewModel()) {
-LazyColumn(){
-    items(viewModel.messageListState.value.size){
-        val item = viewModel.messageListState.value.get(it)
-        //if (item)
+    LazyColumn() {
+        items(viewModel.messageListState.value.size) {
+            val item = viewModel.messageListState.value.get(it)
+            //if (item)
+        }
     }
-}
 
 }
 
