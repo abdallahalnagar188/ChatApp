@@ -71,7 +71,7 @@ fun ChatScreenContent(viewModel: ChatViewModel = viewModel(), navigator: Navigat
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 IconButton(onClick = {
-                    navigator.navigateUp()
+                    viewModel.navigateUp()
                 }) {
                     Icon(
                         painter = painterResource(id = R.drawable.icon_back),
@@ -133,16 +133,16 @@ fun ChatSendMessageBar(viewModel: ChatViewModel = viewModel()) {
                 viewModel.addMessageToFirestore()
             },
             modifier = Modifier
-                .padding(12.dp)
-                .width(100.dp),
+                .padding(2.dp)
+                ,
             colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue)),
             shape = RoundedCornerShape(8.dp)
         ) {
             Text(text = "Send")
-            Icon(
-                painter = painterResource(id = R.drawable.icon_send),
-                contentDescription = "icon send",
-            )
+//            Icon(
+//                painter = painterResource(id = R.drawable.icon_send),
+//                contentDescription = "icon send",
+//            )
 
         }
 

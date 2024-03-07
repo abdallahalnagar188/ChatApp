@@ -120,7 +120,7 @@ fun AddRoomCard(viewModel: AddRoomViewModel = viewModel(),navigator: Navigator) 
         colors = CardDefaults.cardColors(Color.White),
         modifier = Modifier
             .fillMaxSize()
-            .padding(start = 30.dp, top = 90.dp, end = 30.dp, bottom = 140.dp),
+            .padding(start = 30.dp, top = 90.dp, end = 30.dp, bottom = 90.dp),
         shape = RoundedCornerShape(14.dp),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 8.dp
@@ -213,7 +213,7 @@ fun AddRoomCard(viewModel: AddRoomViewModel = viewModel(),navigator: Navigator) 
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(0.85F)
-                    .padding(vertical = 20.dp)
+                    .padding(vertical = 22.dp)
             ) {
                 Text(
                     text = "Create",
