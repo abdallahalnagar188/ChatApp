@@ -42,7 +42,7 @@ import com.example.chatapp.addRoom.AddRoomActivity
 import com.example.chatapp.chat.ChatActivity
 import com.example.chatapp.home.ui.theme.ChatAppTheme
 import com.example.chatapp.model.Category
-import com.example.chatapp.model.Constance
+import com.example.chatapp.model.Constants
 import com.example.chatapp.model.Room
 
 class HomeActivity : ComponentActivity(), Navigator {
@@ -63,7 +63,7 @@ class HomeActivity : ComponentActivity(), Navigator {
 
     override fun navigateToChatScreen(room: Room) {
         val intent = Intent(this@HomeActivity, ChatActivity::class.java)
-        intent.putExtra(Constance.EXTRA_ROOM,room)
+        intent.putExtra(Constants.EXTRA_ROOM,room)
         startActivity(intent)
     }
 }
@@ -89,7 +89,7 @@ fun HomeContent(viewModel: HomeViewModel = viewModel(), navigator: Navigator) {
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    navigator.navigateToAddRoomScreen()
+                    viewModel.navigateToAddRoomScreen()
                 },
                 containerColor = colorResource(id = R.color.blue),
                 contentColor = colorResource(
@@ -140,7 +140,7 @@ fun ChatRoomCard(room: Room, viewModel: HomeViewModel = viewModel(), navigator: 
     Card(
         onClick = {
             viewModel.navigator = navigator
-            navigator.navigateToChatScreen(room)
+            viewModel.navigateToChatScreen(room)
         },
         modifier = Modifier
             .height(200.dp)

@@ -4,13 +4,13 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -37,6 +37,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.chatapp.R
 import com.example.chatapp.chat.ui.theme.ChatAppTheme
+import com.example.chatapp.model.Constants
+import com.example.chatapp.model.DataUtils
+import com.example.chatapp.model.Message
 import com.example.chatapp.model.Room
 
 class ChatActivity : ComponentActivity(), Navigator {
@@ -44,10 +47,11 @@ lateinit var room: Room
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val room = intent.getParcelableExtra<Room>(Constants.EXTRA_ROOM)!!
         setContent {
             ChatAppTheme {
                 // A surface container using the 'background' color from the theme
-                ChatScreenContent(navigator = this)
+                ChatScreenContent(navigator = this, room = room)
             }
         }
     }
@@ -59,9 +63,10 @@ lateinit var room: Room
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ChatScreenContent(viewModel: ChatViewModel = viewModel(), navigator: Navigator) {
+fun ChatScreenContent(viewModel: ChatViewModel = viewModel(), navigator: Navigator, room: Room) {
     viewModel.navigator = navigator
-    Scaffold(contentColor = Color.White,
+    Scaffold(
+        contentColor = Color.White,
         topBar = {
             Row(
                 modifier = Modifier
@@ -79,7 +84,7 @@ fun ChatScreenContent(viewModel: ChatViewModel = viewModel(), navigator: Navigat
                     )
                 }
                 Text(
-                    text = "Movie Room",
+                    text = room.name ?: "",
                     style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp),
                     textAlign = TextAlign.Center
                 )
@@ -155,8 +160,31 @@ fun ChatLazyColumn(viewModel: ChatViewModel = viewModel()) {
     LazyColumn() {
         items(viewModel.messageListState.value.size) {
             val item = viewModel.messageListState.value.get(it)
-            //if (item)
+            if (item.senderId == DataUtils.appUser?.id) {
+
+            } else {
+
+            }
         }
+    }
+
+}
+
+@Composable
+fun SendMessageRow(message: Message) {
+    Row(horizontalArrangement = Arrangement.End) {
+        Text(
+            text = message.content ?: "",
+            modifier = Modifier.background(
+                colorResource(id = R.color.blue),
+                shape = RoundedCornerShape(
+                    bottomStart = 25.dp,
+                    topStart = 25.dp,
+                    topEnd = 25.dp,
+                    bottomEnd = 0.dp
+                )
+            )
+        )
     }
 
 }

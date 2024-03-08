@@ -1,5 +1,5 @@
 package com.example.chatapp.model
 
-object Constance {
+object Constants {
     const val EXTRA_ROOM = "Room"
 }
