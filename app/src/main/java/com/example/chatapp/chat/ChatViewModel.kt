@@ -32,8 +32,8 @@ class ChatViewModel:ViewModel() {
             roomId = room?.roomId
         )
         addMessageFromFirestoreDB(
-            message,
-            roomId = room?.roomId ?: "",
+            message = message,
+            roomId = room?.roomId!!,
             onSuccessListener = {
                 messageFieldState.value = ""
             },
