@@ -41,6 +41,8 @@ import com.example.chatapp.model.Constants
 import com.example.chatapp.model.DataUtils
 import com.example.chatapp.model.Message
 import com.example.chatapp.model.Room
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class ChatActivity : ComponentActivity(), Navigator {
 lateinit var room: Room
@@ -66,6 +68,7 @@ lateinit var room: Room
 fun ChatScreenContent(viewModel: ChatViewModel = viewModel(), navigator: Navigator, room: Room) {
     viewModel.navigator = navigator
     viewModel.room = room
+    viewModel.getMessageFromFirestore()
     Scaffold(
         contentColor = Color.White,
         topBar = {
@@ -112,6 +115,7 @@ fun ChatScreenContent(viewModel: ChatViewModel = viewModel(), navigator: Navigat
                     painterResource(id = R.drawable.bg_app),
                     contentScale = ContentScale.FillBounds
                 )
+                .padding(top = it.calculateTopPadding(), bottom = it.calculateBottomPadding())
         ) {
             ChatLazyColumn()
 
@@ -159,12 +163,14 @@ fun ChatSendMessageBar(viewModel: ChatViewModel = viewModel()) {
 
 @Composable
 fun ChatLazyColumn(viewModel: ChatViewModel = viewModel()) {
-    LazyColumn() {
+    LazyColumn(modifier = Modifier.fillMaxSize(), reverseLayout = true) {
         items(viewModel.messageListState.value.size) {
             val item = viewModel.messageListState.value.get(it)
             if (item.senderId == DataUtils.appUser?.id) {
+                SendMessageRow(message = item)
 
             } else {
+                ReceivedMessageRow(message = item)
 
             }
         }
@@ -172,20 +178,70 @@ fun ChatLazyColumn(viewModel: ChatViewModel = viewModel()) {
 
 }
 
+@SuppressLint("SimpleDateFormat")
+@Composable
+fun ReceivedMessageRow(message: Message) {
+    val date = Date(message.dateTime ?: 0)
+    val simpleTimeFormat = SimpleDateFormat("hh:mm a")
+    val dateString = simpleTimeFormat.format(date)
+    Column {
+        Text(text = message.senderName ?: "", style = TextStyle(color = Color.Gray))
+        Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
+            Text(
+                text = message.content ?: "",
+                modifier = Modifier
+                    .padding(vertical = 6.dp, horizontal = 8.dp)
+                    .align(Alignment.CenterVertically)
+                    .background(
+                        colorResource(id = R.color.gray),
+                        shape = RoundedCornerShape(
+                            bottomStart = 0.dp,
+                            topStart = 25.dp,
+                            topEnd = 25.dp,
+                            bottomEnd = 25.dp
+                        )
+                    )
+                    .padding(vertical = 8.dp, horizontal = 8.dp),
+                style = TextStyle(color = colorResource(id = R.color.black), fontSize = 18.sp)
+            )
+            Text(
+                text = dateString,
+                modifier = Modifier.align(Alignment.CenterVertically),
+                style = TextStyle(color = Color.Black)
+            )
+        }
+    }
+
+}
+
+@SuppressLint("SimpleDateFormat")
 @Composable
 fun SendMessageRow(message: Message) {
-    Row(horizontalArrangement = Arrangement.End) {
+    val date = Date(message.dateTime ?: 0)
+    val simpleTimeFormat = SimpleDateFormat("hh:mm a")
+    val dateString = simpleTimeFormat.format(date)
+    Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = dateString,
+            modifier = Modifier.align(Alignment.CenterVertically),
+            style = TextStyle(color = Color.Black)
+        )
         Text(
             text = message.content ?: "",
-            modifier = Modifier.background(
-                colorResource(id = R.color.blue),
-                shape = RoundedCornerShape(
-                    bottomStart = 25.dp,
-                    topStart = 25.dp,
-                    topEnd = 25.dp,
-                    bottomEnd = 0.dp
+            modifier = Modifier
+                .padding(vertical = 6.dp, horizontal = 8.dp)
+                .align(Alignment.CenterVertically)
+                .background(
+                    colorResource(id = R.color.blue),
+                    shape = RoundedCornerShape(
+                        bottomStart = 25.dp,
+                        topStart = 25.dp,
+                        topEnd = 25.dp,
+                        bottomEnd = 0.dp
+                    )
                 )
-            )
+                .padding(vertical = 8.dp, horizontal = 8.dp),
+            style = TextStyle(color = colorResource(id = R.color.white), fontSize = 18.sp)
         )
     }
 
