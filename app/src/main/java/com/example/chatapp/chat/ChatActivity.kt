@@ -163,9 +163,11 @@ fun ChatSendMessageBar(viewModel: ChatViewModel = viewModel()) {
 
 @Composable
 fun ChatLazyColumn(viewModel: ChatViewModel = viewModel()) {
-    LazyColumn(modifier = Modifier.fillMaxSize(), reverseLayout = true) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(), reverseLayout = true
+    ) {
         items(viewModel.messageListState.value.size) {
-            val item = viewModel.messageListState.value.get(it)
+            val item = viewModel.messageListState.value[it]
             if (item.senderId == DataUtils.appUser?.id) {
                 SendMessageRow(message = item)
 
@@ -185,13 +187,21 @@ fun ReceivedMessageRow(message: Message) {
     val simpleTimeFormat = SimpleDateFormat("hh:mm a")
     val dateString = simpleTimeFormat.format(date)
     Column {
-        Text(text = message.senderName ?: "", style = TextStyle(color = Color.Gray))
-        Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = message.senderName ?: "",
+            style = TextStyle(color = Color.Black), fontSize = 14.sp,
+            modifier = Modifier.align(
+                Alignment.Start
+            )
+        )
+        Row(
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
             Text(
                 text = message.content ?: "",
                 modifier = Modifier
-                    .padding(vertical = 6.dp, horizontal = 8.dp)
-                    .align(Alignment.CenterVertically)
                     .background(
                         colorResource(id = R.color.gray),
                         shape = RoundedCornerShape(
@@ -201,6 +211,8 @@ fun ReceivedMessageRow(message: Message) {
                             bottomEnd = 25.dp
                         )
                     )
+                    .padding(vertical = 6.dp, horizontal = 8.dp)
+                    .align(Alignment.CenterVertically)
                     .padding(vertical = 8.dp, horizontal = 8.dp),
                 style = TextStyle(color = colorResource(id = R.color.black), fontSize = 18.sp)
             )

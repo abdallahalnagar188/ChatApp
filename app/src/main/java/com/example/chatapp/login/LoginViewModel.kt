@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.chatapp.database.getUserFromFirestoreDB
 import com.example.chatapp.model.AppUser
+import com.example.chatapp.model.DataUtils
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
@@ -70,9 +71,11 @@ class LoginViewModel : ViewModel() {
         getUserFromFirestoreDB(uid!!,
             onSuccessListener = {
                 val appUser = it.toObject(AppUser::class.java)
-
+                DataUtils.appUser = appUser
+                DataUtils.firebaseUser = auth.currentUser
                 message.value = "Successful Login"
                 showLoading.value = false
+                navigator?.openHomeActivity()
             }, onFailureListener = {
                 showLoading.value = false
                 message.value = it.localizedMessage ?: ""

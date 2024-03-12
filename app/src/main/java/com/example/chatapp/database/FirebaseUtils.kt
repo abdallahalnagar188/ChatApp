@@ -9,6 +9,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.firestore
 
@@ -67,8 +68,10 @@ fun getRoomsFromFirestoreDB(
 fun getMessageFromFirestoreDB(
     roomId: String,listener:EventListener<QuerySnapshot>
 ) {
-    val messageCollection = getCollectionRef(roomId)
-    messageCollection.addSnapshotListener(listener)
+    val messageCollection = getMessageRef(roomId = roomId)
+    messageCollection
+        .orderBy("dateTime", Query.Direction.DESCENDING)
+        .addSnapshotListener(listener)
 
 }
 
@@ -79,7 +82,7 @@ fun addMessageFromFirestoreDB(
     onFailureListener: OnFailureListener
 
 ) {
-    val messageCollection = getCollectionRef(roomId)
+    val messageCollection = getMessageRef(roomId = roomId)
     val messageDoc = messageCollection.document()
     message.id = messageDoc.id
     messageDoc.set(message).addOnSuccessListener(onSuccessListener)

@@ -58,7 +58,10 @@ class ChatViewModel:ViewModel() {
                     else -> {}
                 }
             }
-            messageListState.value = mutableList
+            val newList = mutableListOf<Message>()
+            newList.addAll(mutableList)
+            newList.addAll(messageListState.value)
+            messageListState.value = newList.toList()
 
         })
     }

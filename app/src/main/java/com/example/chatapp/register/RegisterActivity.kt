@@ -1,6 +1,7 @@
 package com.example.chatapp.register
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -49,22 +50,29 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.chatapp.R
+import com.example.chatapp.home.HomeActivity
 import com.example.chatapp.register.ui.theme.ChatAppTheme
 
-class RegisterActivity : ComponentActivity() {
+class RegisterActivity : ComponentActivity(), Navigator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ChatAppTheme {
-                RegisterContent()
+                RegisterContent(navigator = this)
             }
         }
+    }
+
+    override fun navigateToHome() {
+        val intent = Intent(this@RegisterActivity, HomeActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun RegisterContent(viewModel: RegisterViewModel = viewModel()) {
+fun RegisterContent(viewModel: RegisterViewModel = viewModel(), navigator: Navigator) {
     Scaffold(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -96,7 +104,7 @@ fun RegisterContent(viewModel: RegisterViewModel = viewModel()) {
                 viewModel.sendAuthDataToFirebase()
             }
             LoadingDialog()
-            ChatAlertDialog()
+            ChatAlertDialog(navigator = navigator)
         }
     }
 }
@@ -202,19 +210,19 @@ fun ChatAuthTextField(
 fun GreetingPreview2() {
     ChatAppTheme {
         // RegisterContent()
-        ChatAlertDialog()
-
     }
 }
 
 @Composable
-fun ChatAlertDialog(viewModel: RegisterViewModel = viewModel()) {
+fun ChatAlertDialog(viewModel: RegisterViewModel = viewModel(), navigator: Navigator) {
+    viewModel.navigator = navigator
     if (viewModel.message.value.isNotEmpty())
         AlertDialog(onDismissRequest = {
             viewModel.message.value = ""
         }, confirmButton = {
             TextButton(onClick = {
                 viewModel.message.value = ""
+                viewModel.navigator?.navigateToHome()
             }) {
                 Text(text = "ok")
             }

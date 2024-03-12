@@ -5,7 +5,9 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.chatapp.database.addUserToFirestoreDB
+import com.example.chatapp.database.getUserFromFirestoreDB
 import com.example.chatapp.model.AppUser
+import com.example.chatapp.model.DataUtils
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
@@ -19,6 +21,21 @@ class RegisterViewModel : ViewModel() {
     val showLoading = mutableStateOf(false)
     val message = mutableStateOf("")
     private val auth = Firebase.auth
+    var navigator: Navigator? = null
+
+    fun getUserFromFirestore(){
+        getUserFromFirestoreDB(
+            auth.currentUser?.uid!!,
+            onSuccessListener = {
+                DataUtils.appUser = it.toObject(AppUser::class.java)
+                DataUtils.firebaseUser = auth.currentUser
+                navigator?.navigateToHome()
+
+            },
+            onFailureListener = {
+                Log.e("tag",it.localizedMessage)
+            })
+    }
 
     fun validate(): Boolean {
         if (firstNameState.value.isEmpty() || firstNameState.value.isBlank()) {
@@ -78,6 +95,7 @@ class RegisterViewModel : ViewModel() {
             onSuccessListener = {
                 message.value = "successful"
                 showLoading.value = false
+                getUserFromFirestore()
             }, onFailureListener = {
                 showLoading.value = false
                 message.value = it.localizedMessage ?: ""
