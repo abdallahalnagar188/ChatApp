@@ -113,11 +113,9 @@ fun HomeContent(viewModel: HomeViewModel = viewModel(), navigator: Navigator) {
         ) {
             Spacer(modifier = Modifier.height(120.dp))
             ChatRoomLazyGrid(navigator = navigator)
-
         }
 
     }
-
 }
 
 @Composable
@@ -143,7 +141,7 @@ fun ChatRoomCard(room: Room, viewModel: HomeViewModel = viewModel(), navigator: 
             viewModel.navigateToChatScreen(room)
         },
         modifier = Modifier
-            .height(200.dp)
+            .height(170.dp)
             .padding(16.dp),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 8.dp
@@ -173,13 +171,6 @@ fun ChatRoomCard(room: Room, viewModel: HomeViewModel = viewModel(), navigator: 
                     .align(Alignment.CenterHorizontally)
                     .padding(vertical = 8.dp),
                 style = TextStyle(fontSize = 14.sp, color = Color.Black)
-            )
-            Text(
-                text = "Room Image",
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(vertical = 8.dp),
-                style = TextStyle(fontSize = 12.sp, color = Color.Gray)
             )
 
         }

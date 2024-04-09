@@ -63,12 +63,10 @@ class AddRoomActivity : ComponentActivity(),Navigator {
             }
         }
     }
-
     override fun navigateUp() {
         finish()
     }
 }
-
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AddRoomContent(viewModel: AddRoomViewModel = viewModel(),navigator: Navigator) {
