@@ -121,7 +121,7 @@ fun AddRoomCard(viewModel: AddRoomViewModel = viewModel(),navigator: Navigator) 
             .padding(start = 30.dp, top = 90.dp, end = 30.dp, bottom = 90.dp),
         shape = RoundedCornerShape(14.dp),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 8.dp
+            defaultElevation = 6.dp
         )
     ) {
         Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
