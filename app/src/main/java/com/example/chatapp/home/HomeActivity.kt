@@ -154,7 +154,7 @@ fun ChatRoomCard(room: Room, viewModel: HomeViewModel = viewModel(), navigator: 
         ) {
             Image(
                 painter = painterResource(
-                    id = Category.fromId(room.categoryId ?: Category.MOVIES)?.imageId
+                    id = Category.fromId(room.categoryId ?: Category.MOVIES).imageId
                         ?: R.drawable.icon_movie
                 ),
                 contentDescription = "Room Image",
