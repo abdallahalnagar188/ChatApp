@@ -268,6 +268,5 @@ fun SendMessageRow(message: Message) {
 @Composable
 fun GreetingPreview5() {
     ChatAppTheme {
-
     }
 }
