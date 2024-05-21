@@ -140,22 +140,24 @@ fun ChatSendMessageBar(viewModel: ChatViewModel = viewModel()) {
                 topStart = 0.dp,
                 topEnd = 15.dp,
                 bottomEnd = 0.dp
-            ), modifier = Modifier.padding(12.dp)
+            ), modifier = Modifier
+                .padding(12.dp)
+                .weight(0.7f)
         )
         Button(
             onClick = {
                 viewModel.addMessageToFirestore()
             },
             modifier = Modifier
-                .padding(2.dp),
+                .padding(2.dp).weight(0.3f),
             colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue)),
             shape = RoundedCornerShape(8.dp)
         ) {
-            Text(text = "Send")
+            Text(text = "Send", modifier = Modifier.weight(0.6f))
 
             Icon(
                 painter = painterResource(id = R.drawable.icon_send),
-                contentDescription = "icon send",
+                contentDescription = "icon send", modifier = Modifier.weight(0.4f)
             )
         }
     }
@@ -190,9 +192,11 @@ fun ReceivedMessageRow(message: Message) {
         Text(
             text = message.senderName ?: "",
             style = TextStyle(color = Color.Black), fontSize = 14.sp,
-            modifier = Modifier.align(
-                Alignment.Start
-            )
+            modifier = Modifier
+                .padding(start = 6.dp)
+                .align(
+                    Alignment.Start
+                )
         )
         Row(
             horizontalArrangement = Arrangement.Start,
