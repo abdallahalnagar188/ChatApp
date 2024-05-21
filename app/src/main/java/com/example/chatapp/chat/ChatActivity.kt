@@ -153,16 +153,12 @@ fun ChatSendMessageBar(viewModel: ChatViewModel = viewModel()) {
         ) {
             Text(text = "Send")
 
-
             Icon(
                 painter = painterResource(id = R.drawable.icon_send),
                 contentDescription = "icon send",
             )
-
         }
-
     }
-
 }
 
 @Composable
