@@ -44,7 +44,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -121,7 +120,7 @@ fun AddRoomCard(viewModel: AddRoomViewModel = viewModel(),navigator: Navigator) 
             .padding(start = 30.dp, top = 90.dp, end = 30.dp, bottom = 90.dp),
         shape = RoundedCornerShape(14.dp),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 8.dp
+            defaultElevation = 6.dp
         )
     ) {
         Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
@@ -269,13 +268,4 @@ fun LoadingDialog(viewModel: AddRoomViewModel = viewModel()) {
             }
 
         }
-}
-
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun GreetingPreview4() {
-    ChatAppTheme {
-
-    }
 }
