@@ -65,7 +65,11 @@ lateinit var room: Room
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ChatScreenContent(viewModel: ChatViewModel = viewModel(), navigator: Navigator, room: Room) {
+fun ChatScreenContent(
+    viewModel: ChatViewModel = viewModel(),
+    navigator: Navigator,
+    room: Room
+) {
     viewModel.navigator = navigator
     viewModel.room = room
     viewModel.getMessageFromFirestore()

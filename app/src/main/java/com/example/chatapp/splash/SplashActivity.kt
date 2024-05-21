@@ -10,12 +10,10 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.chatapp.R
@@ -56,7 +54,7 @@ fun SplashScreen(
     viewModel .navigator = navigator
     viewModel.navigate()
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (logo, signature) = createRefs()
+        val (logo) = createRefs()
         Image(
             painter = painterResource(id = R.drawable.ic_logo),
             contentDescription = "logo",
@@ -67,18 +65,8 @@ fun SplashScreen(
                     bottom.linkTo(parent.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                })
-        Image(painter = painterResource(id = R.drawable.signature),
-            contentDescription = "signature",
-            modifier = Modifier
-                .fillMaxWidth(0.45F)
-                .padding(8.dp)
-                .constrainAs(signature) {
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                })
-
+                }
+        )
     }
 }
 
