@@ -231,16 +231,6 @@ fun ChatAuthTextField(
 }
 
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun GreetingPreview2() {
-    ChatAppTheme {
-        // RegisterContent()
-        ChatAlertDialog()
-
-    }
-}
-
 @Composable
 fun ChatAlertDialog(viewModel: LoginViewModel = viewModel()) {
     if (viewModel.message.value.isNotEmpty())
@@ -257,4 +247,15 @@ fun ChatAlertDialog(viewModel: LoginViewModel = viewModel()) {
                 Text(text = viewModel.message.value)
             }
         )
+}
+
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun GreetingPreview2() {
+    ChatAppTheme {
+        // RegisterContent()
+        ChatAlertDialog()
+
+    }
 }
